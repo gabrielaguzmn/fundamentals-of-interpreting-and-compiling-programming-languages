@@ -6,8 +6,13 @@
 
 #lang eopl
 
-
-;; Punto #1 invert :
+;; PUNTO 1 invert 
+;; Propósito:
+;; L -> L' : Procedimiento que recibe una lista de pares y devuelve una lista con los pares invertidos.
+;;
+;; <lista> := ()
+;;         | (<par> <lista>)
+;; <par> := (<valor> <valor>)
 (define invert
   (lambda (l)
     (if (null? l)
@@ -20,7 +25,12 @@
 (display (invert '((5 9) (10 91) (82 7) (a e) ("hola" "Mundo")))) (newline)
 (display (invert '(("es" "racket") ("genial" "muy") (17 29) (81 o)))) (newline)
 
-;; Punto #4 filter-in :
+;; Punto #4 filter-in:
+;; Proposito:
+;; P x L -> L' : Procedimiento que filtra los elementos de L que cumplen el predicado P.
+;;
+;; <lista> := ()
+;;          := (<valor> <lista>)
 
 (define filter-in
   (lambda (P L)
@@ -30,12 +40,17 @@
             (cons (car L) (filter-in P (cdr L)))  
             (filter-in P (cdr L)))))) 
 
-;; Pruebas del profe
-(display (filter-in number? '(a 2 (1 3) b 7))) (newline)   ;  (2 7)
-(display (filter-in symbol? '(a (b c) 17 foo))) (newline)  ;  (a foo)
-(display (filter-in string? '(a b u "univalle" "racket" "flp" 28 90 (1 2 3)))) (newline)  ; ("univalle" "racket" "flp")
+;; Pruebas:
+(display (filter-in number? '(a 2 (1 3) b 7))) (newline)   
+(display (filter-in symbol? '(a (b c) 17 foo))) (newline)  
+(display (filter-in string? '(a b u "univalle" "racket" "flp" 28 90 (1 2 3)))) (newline)  
 
-;; Punto #7 cartesian-product :
+;; Punto #7 cartesian-product:
+;; Proposito:
+;; L1 x L2 -> L' : Procedimiento que devuelve el producto cartesiano entre dos listas.
+;;
+;; <lista> := ()
+;;          := (<valor> <lista>)
 
 (define cartesian-product
   (lambda (L1 L2)
@@ -45,6 +60,8 @@
                 (cartesian-product (cdr L1) L2)))))  
 
 ;; Función auxiliar pair-with
+;; Proposito:
+;; x x L -> L' : Procedimiento que combina un valor con cada elemento de la lista.
 (define pair-with
   (lambda (x L)
     (if (null? L)
@@ -56,7 +73,12 @@
 (display (cartesian-product '(p q r) '(5 6 7))) (newline)
 (display (cartesian-product '(1 2) '(a b c d))) (newline)
 
-;; Punto 10 up :
+;; Punto #10 up :
+;; Proposito:
+;; L -> L' : Procedimiento que remueve un nivel de paréntesis de la lista dada.
+;;
+;; <lista> := ()
+;;          := (<valor> <lista>)
 (define up
   (lambda (L)
     (if (null? L)
@@ -64,7 +86,9 @@
         (append (unpack (car L))  
                 (up (cdr L))))))  
 
-;; Función auxiliar unpack 
+;; Función auxiliar unpack
+;; Proposito:
+;; x -> L' : Procedimiento que devuelve la lista si x es lista, o lo envuelve en una.
 (define unpack
   (lambda (x)
     (if (list? x)
@@ -72,12 +96,18 @@
         (list x))))  
 
 ;; Pruebas
-(display (up '((1 2) (3 4)))) (newline)  ; prueba del profesor (1 2 3 4) 
-(display (up '((x (y)) z))) (newline)   ; prueba del profesor (x (y) z)
-(display (up '(((a b)) (c d) e))) (newline)  ; mi prueba ((a b) c d e)
-(display (up '((p) q ((r s))))) (newline)  ; mi prueba (p q (r s))
+(display (up '((1 2) (3 4)))) (newline)  
+(display (up '((x (y)) z))) (newline)   
+(display (up '(((a b)) (c d) e))) (newline)  
+(display (up '((p) q ((r s))))) (newline)  
 
-;; Punto 13 operate :
+;; Punto 13 operate:
+;; Proposito:
+;; L_ops x L_nums -> num : Procedimiento que aplica operaciones en secuencia a los números.
+;;
+;; <lista> := ()
+;;          := (<valor> <lista>)
+
 (define (operate operaciones numeros)
   (if (null? operaciones) 
       (car numeros) 
@@ -89,8 +119,18 @@
 (display (operate (list *) '(4 5))) (newline)  ; -> 20
 (display (operate (list + - * /) '(10 5 2 4 2))) (newline)  ; -> 6
 
-;; Punto 16 Operar-binarias :
-;; Definición de  Funcion auxiliar my-length para contar los elementos de una lista
+;; Punto #16 Operar-binarias :
+;; Proposito:
+;; OperacionB -> num : Procedimiento que evalúa expresiones binarias.
+;;
+;; <OperacionB> := <int>
+;;              := (<OperacionB> 'suma <OperacionB>)
+;;              := (<OperacionB> 'resta <OperacionB>)
+;;              := (<OperacionB> 'multiplica <OperacionB>)
+
+;; Función auxiliar my-length
+;; Proposito:
+;; L -> num : Procedimiento que devuelve la longitud de una lista.
 (define my-length
   (lambda (lst)
     (if (null? lst)  
@@ -114,10 +154,10 @@
       (else 'expresion-invalida))))  
 
       ;; Pruebas
-(display (Operar-binarias 4)) (newline)  ; -> 4
-(display (Operar-binarias '(2 suma 9))) (newline)  ; -> 11
-(display (Operar-binarias '(2 resta 9))) (newline)  ; -> -7
-(display (Operar-binarias '(2 multiplica 9))) (newline)  ; -> 18
-(display (Operar-binarias '((2 multiplica 3) suma (5 resta 1)))) (newline)  ; -> 10
-(display (Operar-binarias '((2 multiplica (4 suma 1)) multiplica ((2 multiplica 4) resta 1)))) (newline)  ; -> 70
+(display (Operar-binarias 4)) (newline)  
+(display (Operar-binarias '(2 suma 9))) (newline) 
+(display (Operar-binarias '(2 resta 9))) (newline)  
+(display (Operar-binarias '(2 multiplica 9))) (newline)  
+(display (Operar-binarias '((2 multiplica 3) suma (5 resta 1)))) (newline)  
+(display (Operar-binarias '((2 multiplica (4 suma 1)) multiplica ((2 multiplica 4) resta 1)))) (newline)  
 (display (Operar-binarias '(2 divide 3)))  ; → 'operador-invalido)
