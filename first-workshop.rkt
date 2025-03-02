@@ -12,7 +12,7 @@
 ;;
 ;; <lista> := ()
 ;;          := (<valor-de-scheme> <lista>)
-
+;auxiliar
 ;append
 (define juntarListas
   (lambda (l1 l2)
@@ -32,7 +32,7 @@
 ;;          := (<valor-de-scheme> <lista>)
 
 ;lenght
-
+;auxiliar
 (define (longi L)
   (if (null? L)
       0
@@ -49,7 +49,7 @@
 ;;          := (<valor-de-scheme> <lista>)
 
 ;filter
-
+;auxiliar
 (define (filtrar x L)
   (cond
     [(null? L) '()]   ; Caso base: lista vacía, devuelve lista vacía
