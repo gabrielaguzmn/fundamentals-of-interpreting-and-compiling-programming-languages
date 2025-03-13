@@ -1,5 +1,3 @@
-; Taller # 1 - Recursion
-;
 ; Gabriela Guzmán 2326772-3743
 ; Valentina Sanchéz 2324754-3743
 ; Juan Pablo Moreno 2372232-3743
@@ -194,18 +192,21 @@
 
 ;punto 9
 
-(define (inversions L) 
-  
-  (cond
-  [(equal? (longi(filtrar (car L) L)) 0) (inversions(cdr L))]
-  [(> (longi(filtrar (car L) L)) 1) (inversions (juntarListas ((cdr L) ((longi(filtrar (car L) L))))) )]
-  
+; (define (inversions L) 
+;   (cond
+;   [(equal? (longi(filtrar (car L) L)) 0) (inversions(cdr L))]
+;   [(> (longi(filtrar (car L) L)) 1) (cons (longi(filtrar (car L) L)) inversions (juntarListas ((cdr L)))) )] 
+;   [else '()] 
+;   )  
+; )
 
-  [else (car L)]
-  )  
-   
-  
-  )
+(define (inversions L)
+  (cond
+    [(null? L) '()] ; Base case: if the list is empty, return an empty list
+    [(equal? (longi (filtrar (car L) L)) 0) (inversions (cdr L))] ; If no inversions, continue with the rest of the list
+    [(> (longi (filtrar (car L) L)) 1) (cons (longi (filtrar (car L) L)) (inversions (cdr L)))] ; If there are inversions, add to the result
+    [else '()] ; Default case
+    ))
 
 ;; Punto #10 up :
 ;; Proposito:
