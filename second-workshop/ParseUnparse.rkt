@@ -48,18 +48,9 @@
    (rest input_list?)))
 
 
-;(define PARSEBNF 
-;  (lambda (codigo)
-;    (cond
-;    
-;    [(eqv? (car codigo) 'circuit) (circuit (cadr codigo) (PARSEBNF (caadr codigo)))]
-    ;()
-    ;()
-;    (else 'estamalescrito)
-    
-;    )))
-
-;(parsebnf '(circuit (gate_list (gate G1 (type not) (input_list #t)))))
+; -------------------------------------------------------------------------- ;
+;                               PARSEADOR BNF                                ;
+; -------------------------------------------------------------------------- ;
 
 
 
@@ -92,3 +83,18 @@
       (if (boolean? (car lst))  ; Booleano -> `bool-input_list`
           (bool-input_list (car lst) (parse-input-list (cdr lst)))
           (gateref-input_list (car lst) (parse-input-list (cdr lst))))))  ; Identificador -> `gateref-input_list`
+
+; -------------------------------------------------------------------------- ;
+;                               EJEMPLOS DE PRUEBA                           ;
+; -------------------------------------------------------------------------- ;
+
+(display " Ejemplo de prueba 1 ---")
+(newline)
+(display (PARSEBNF '(CIRCUIT (gate_list (gate G1 (type not) (input_list #t))))))
+(newline)
+(display "Ejemplo de prueba 2 ---")
+(newline)
+(display (PARSEBNF '(circuit (gate_list (gate G1 (type and) (input_list A B))))))
+(newline)
+
+
