@@ -61,8 +61,6 @@
 
 ;(parsebnf '(circuit (gate_list (gate G1 (type not) (input_list #t)))))
 
-
-
 (define (PARSEBNF datum)
   (let ((gate-list (cadr datum)))  ; Extraemos la lista de compuertas
     (a-circuit (parse-gate-list (cdr gate-list)))))  ; Convertimos a `gate_list`
@@ -92,3 +90,51 @@
       (if (boolean? (car lst))  ; Booleano -> `bool-input_list`
           (bool-input_list (car lst) (parse-input-list (cdr lst)))
           (gateref-input_list (car lst) (parse-input-list (cdr lst))))))  ; Identificador -> `gateref-input_list`
+
+;; Convierte un árbol de sintaxis abstracta (circuito) a su representación en listas
+(define UNPARSEBNF
+  (lambda (arb)
+    (cases circuit arb
+      (a-circuit (gates) (list 'circuit (cons 'gate_list (UNPARSEBNF-gate-list gates)))))))
+
+;; Convierte una lista de compuertas a su representación en listas
+(define UNPARSEBNF-gate-list
+  (lambda (arb)
+    (cases gate_list arb
+      (empty-gate_list () '())  ;; Caso base: lista vacía
+      (nonempty-gate_list (head tail) 
+        (cons (UNPARSEBNF-gate head) (UNPARSEBNF-gate-list tail)))))) ;; Recursión sobre la lista de compuertas
+
+;; Convierte una compuerta a su representación en listas
+(define UNPARSEBNF-gate
+  (lambda (arb)
+    (cases gate arb
+      (a-gate (id type inputs) 
+        (list 'gate id (list 'type (UNPARSEBNF-type type)) (cons 'input_list (UNPARSEBNF-inputs inputs)))))))
+
+;; Convierte un tipo de compuerta a su representación como símbolo
+(define UNPARSEBNF-type
+  (lambda (arb)
+    (cases type arb
+      (and-type () 'and)  ;; Compuerta AND
+      (or-type () 'or)    ;; Compuerta OR
+      (not-type () 'not)  ;; Compuerta NOT
+      (xor-type () 'xor)))) ;; Compuerta XOR
+
+;; Convierte una lista de entradas a su representación en listas
+(define (UNPARSEBNF-inputs arb)
+  (cases input_list arb
+    (empty-input_list () '())  ;; Caso base: lista vacía
+    (bool-input_list (value next) (cons value (UNPARSEBNF-inputs next)))  ;; Entrada booleana
+    (gateref-input_list (ref next) (cons ref (UNPARSEBNF-inputs next))))) ;; Referencia a otra compuerta
+
+;; Prueba de UNPARSEBNF
+(define circuit-ejemplo
+  (a-circuit
+   (nonempty-gate_list
+    (a-gate 'G1 (not-type)
+            (gateref-input_list 'A (empty-input_list)))
+    (empty-gate_list))))
+
+;; Muestra el resultado de la conversión de un circuito a listas
+(display (UNPARSEBNF circuit-ejemplo)) (newline)

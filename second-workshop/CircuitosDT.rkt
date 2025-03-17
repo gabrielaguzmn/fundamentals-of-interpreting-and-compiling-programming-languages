@@ -17,6 +17,8 @@
 
 #lang eopl
 
+(display "CircuitosDT.rkt cargado correctamente") (newline)
+
 ; datatype-based grammar implementation
 
 ; constructors
@@ -41,6 +43,7 @@
   (or-type)
   (not-type)
   (xor-type))
+
 
 (define-datatype input_list input_list?
   (empty-input_list)
@@ -99,3 +102,5 @@
 ; Display the circuit
 (write circuit4)
 (newline)
+
+(and-type)
