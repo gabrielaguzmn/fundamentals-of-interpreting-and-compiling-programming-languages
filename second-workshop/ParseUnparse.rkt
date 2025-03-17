@@ -48,18 +48,9 @@
    (rest input_list?)))
 
 
-;(define PARSEBNF 
-;  (lambda (codigo)
-;    (cond
-;    
-;    [(eqv? (car codigo) 'circuit) (circuit (cadr codigo) (PARSEBNF (caadr codigo)))]
-    ;()
-    ;()
-;    (else 'estamalescrito)
-    
-;    )))
-
-;(parsebnf '(circuit (gate_list (gate G1 (type not) (input_list #t)))))
+; -------------------------------------------------------------------------- ;
+;                               PARSEADOR BNF                                ;
+; -------------------------------------------------------------------------- ;
 
 (define (PARSEBNF datum)
   (let ((gate-list (cadr datum)))  ; Extraemos la lista de compuertas
@@ -90,6 +81,24 @@
       (if (boolean? (car lst))  ; Booleano -> `bool-input_list`
           (bool-input_list (car lst) (parse-input-list (cdr lst)))
           (gateref-input_list (car lst) (parse-input-list (cdr lst))))))  ; Identificador -> `gateref-input_list`
+
+; -------------------------------------------------------------------------- ;
+;                               EJEMPLOS DE PRUEBA                           ;
+; -------------------------------------------------------------------------- ;
+
+(display " Ejemplo de prueba 1 ---")
+(newline)
+(display (PARSEBNF '(CIRCUIT (gate_list (gate G1 (type not) (input_list #t))))))
+(newline)
+(display "Ejemplo de prueba 2 ---")
+(newline)
+(display (PARSEBNF '(circuit (gate_list (gate G1 (type and) (input_list A B))))))
+(newline)
+
+; -------------------------------------------------------------------------- ;
+;                               UNPARSEADOR BNF                              ;
+; -------------------------------------------------------------------------- ;
+
 
 ;; Convierte un árbol de sintaxis abstracta (circuito) a su representación en listas
 (define UNPARSEBNF
@@ -128,7 +137,10 @@
     (bool-input_list (value next) (cons value (UNPARSEBNF-inputs next)))  ;; Entrada booleana
     (gateref-input_list (ref next) (cons ref (UNPARSEBNF-inputs next))))) ;; Referencia a otra compuerta
 
-;; Prueba de UNPARSEBNF
+; -------------------------------------------------------------------------- ;
+;                               EJEMPLOS DE PRUEBA UNPARSE                   ;
+; -------------------------------------------------------------------------- ;
+
 (define circuit-ejemplo
   (a-circuit
    (nonempty-gate_list
@@ -137,4 +149,5 @@
     (empty-gate_list))))
 
 ;; Muestra el resultado de la conversión de un circuito a listas
+(display "Ejemplo de prueba 1 UNPARSE")
 (display (UNPARSEBNF circuit-ejemplo)) (newline)
